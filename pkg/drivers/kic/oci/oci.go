@@ -200,6 +200,9 @@ func CreateContainerNode(p CreateParams) error {
 		// podman mounts var/lib with no-exec by default  https://github.com/containers/libpod/issues/5103
 		runArgs = append(runArgs, "--volume", fmt.Sprintf("%s:/var:exec", p.Name))
 
+		// podman has a low default pids limit of 2048; use a higher one
+		runArgs = append(runArgs, "--pids-limit", "65536")
+
 		if memcgSwap {
 			runArgs = append(runArgs, fmt.Sprintf("--memory-swap=%s", p.Memory))
 		}
